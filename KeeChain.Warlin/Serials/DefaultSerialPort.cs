@@ -20,6 +20,10 @@
             {
                 throw new PortAccessDeniedException();
             }
+            catch (IOException)
+            {
+                throw new PortAccessDeniedException();
+            }
             
             _port.Parity = Parity.None;
             _port.StopBits = StopBits.One;
