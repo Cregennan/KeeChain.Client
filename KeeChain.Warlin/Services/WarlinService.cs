@@ -8,6 +8,8 @@
     public class WarlinService
     {
         private const int DefaultBaudRate = 115600;
+
+        private const int DefaultTimeout = 10 * 60;
         
         private readonly ISerialPort _connection;
 
@@ -27,6 +29,7 @@
             return true;
         }
 
+        
         public async Task<TResponse> SendRequestAsync<TRequest, TResponse>(TRequest request)
             where TRequest : IWarlinBinding<TRequest, TResponse>
             where TResponse : IWarlinResponse<TResponse>, new()
@@ -36,6 +39,11 @@
             return await GetFromDeviceAsync<TResponse>().ConfigureAwait(false);
         }
 
+        /// <summary>
+        /// Отправка запроса на устройство
+        /// </summary>
+        /// <param name="request">Запрос</param>
+        /// <typeparam name="TRequest">Тип запроса, реализующий <see cref="IWarlinRequest{TRequest}"/></typeparam>
         private async Task SendToDeviceAsync<TRequest>(TRequest request)
             where TRequest : IWarlinRequest<TRequest>
         {
@@ -57,10 +65,23 @@
             }
             
             //Отправляем на устройство
-            await _connection.WriteLineAsync(sb).ConfigureAwait(false);
+            var writeTask = _connection.WriteLineAsync(sb);
+            var timeoutTask = Task.Delay(DefaultTimeout);
+            if (timeoutTask == await Task.WhenAny(writeTask, timeoutTask))
+            {
+                throw new TimeoutException("Устройство не отвечает");
+            }
+            
             sb.Clear();
         }
 
+        /// <summary>
+        /// Получение ответа с устройства
+        /// </summary>
+        /// <typeparam name="TResponse">Тип ответа</typeparam>
+        /// <returns>Ответ с устройства, если его удалось десериализовать</returns>
+        /// <exception cref="InvalidRequestResponseTypeReturnedException">Выбрасывается в случае, если с устройства пришел ответ не того типа, который ожидается</exception>
+        /// <exception cref="NotEnoughTokensInResponseException">Выбрасывается в случае, если количество элементов в ответе не соответствует ожидаемому для данного типа ответа</exception>
         private async Task<TResponse> GetFromDeviceAsync<TResponse>()
             where TResponse : IWarlinResponse<TResponse>, new()
         {

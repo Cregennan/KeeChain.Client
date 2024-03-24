@@ -3,6 +3,8 @@
     using System.Text;
     using Exceptions;
     using Interfaces;
+    using Requests;
+    using Responses;
 
     public static class SerialPortUtility
     {
@@ -20,12 +22,14 @@
             {
                 try
                 {
+                    var discover = new DiscoverRequest().IdentifyingToken;
+                    var discoverResult = new DiscoverResponse().IdentifyingToken;
                     connection.Begin(portName, baudRate);
-                    connection.WriteLine("WARLIN<PART>DISCOVER");
+                    connection.WriteLine($"{Definitions.WarlinMagicHeader}{Definitions.WarlinDefaultDivider}{discover}");
                     try
                     {
                         var line = connection.ReadLine();
-                        if (line == "WARLIN<PART>HELLO")
+                        if (line == $"{Definitions.WarlinMagicHeader}{Definitions.WarlinDefaultDivider}{discoverResult}")
                         {
                             connection.Stop();
                             return portName;
@@ -48,7 +52,7 @@
             return null;
         }
 
-        public static Task<string> ReadLineAsync(this ISerialPort serialPort)
+        internal static Task<string> ReadLineAsync(this ISerialPort serialPort)
         {
             return Task.FromResult(serialPort.ReadLine());
         }

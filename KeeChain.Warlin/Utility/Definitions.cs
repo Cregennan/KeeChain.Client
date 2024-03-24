@@ -2,7 +2,7 @@
 
 public class Definitions
 {
-    public const string WarlinMagicHeader = "WARLIN";
+    internal const string WarlinMagicHeader = "WARLIN";
 
-    public const string WarlinDefaultDivider = "<PART>";
+    internal const string WarlinDefaultDivider = "<PART>";
 }
