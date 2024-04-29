@@ -1,5 +1,6 @@
 ﻿namespace KeeChain.Warlin.Services
 {
+    using System.Diagnostics;
     using System.Text;
     using Exceptions;
     using KeeChain.Warlin.Interfaces;
@@ -29,9 +30,13 @@
             return true;
         }
 
-        
-        public async Task<TResponse> SendRequestAsync<TRequest, TResponse>(TRequest request)
-            where TRequest : IWarlinBinding<TRequest, TResponse>
+        /// <summary>
+        /// Отправляет запрос и получает ответ на него с устройства
+        /// </summary>
+        /// <exception cref="InvalidRequestResponseTypeReturnedException">Выбрасывается в случае, если с устройства пришел ответ не того типа, который ожидается</exception>
+        /// <exception cref="NotEnoughTokensInResponseException">Выбрасывается в случае, если количество элементов в ответе не соответствует ожидаемому для данного типа ответа</exception>
+        public async Task<WarlinResponseWrapper<TResponse>> SendRequestAsync<TRequest, TResponse>(TRequest request)
+            where TRequest : IWarlinRequestable<TRequest, TResponse>
             where TResponse : IWarlinResponse<TResponse>, new()
         {
             await SendToDeviceAsync(request).ConfigureAwait(false);
@@ -82,7 +87,7 @@
         /// <returns>Ответ с устройства, если его удалось десериализовать</returns>
         /// <exception cref="InvalidRequestResponseTypeReturnedException">Выбрасывается в случае, если с устройства пришел ответ не того типа, который ожидается</exception>
         /// <exception cref="NotEnoughTokensInResponseException">Выбрасывается в случае, если количество элементов в ответе не соответствует ожидаемому для данного типа ответа</exception>
-        private async Task<TResponse> GetFromDeviceAsync<TResponse>()
+        private async Task<WarlinResponseWrapper<TResponse>> GetFromDeviceAsync<TResponse>()
             where TResponse : IWarlinResponse<TResponse>, new()
         {
             while (true)
@@ -91,8 +96,18 @@
                 var deviceResponse = await _connection.ReadLineAsync().ConfigureAwait(false);
                 
                 var parts = deviceResponse.Split(Definitions.WarlinDefaultDivider);
+                
                 if (parts[0] != Definitions.WarlinMagicHeader)
                 {
+                    if (parts[0].StartsWith(Definitions.WarlinDeviceDebugHeader))
+                    {
+                        Console.WriteLine(string.Join(" ", parts));
+                    }
+                    if (parts[0].StartsWith(Definitions.WarlinErrorHeader))
+                    {
+                        throw new WarlinException(string.Join(" ", parts));
+                    }
+
                     continue;
                 }
                 
@@ -101,6 +116,10 @@
                 // Идентифицируем тип ответа
                 if (parts[1] != response.IdentifyingToken)
                 {
+                    if (parts[1] == Definitions.WarlinBoardErrorType)
+                    {
+                        return new WarlinResponseWrapper<TResponse>(parts.Skip(2).FirstOrDefault() ?? string.Empty);
+                    }
                     throw new InvalidRequestResponseTypeReturnedException();
                 }
             
@@ -112,7 +131,7 @@
                 // Заполняем ответ
                 response.FromTokens(parts.Skip(2));
 
-                return response;
+                return new WarlinResponseWrapper<TResponse>(response);
             }
         }
     }
