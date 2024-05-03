@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeChain.Application.Cli", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeChain.Warlin", "KeeChain.Warlin\KeeChain.Warlin.csproj", "{F23A25C5-B3A3-45E8-848A-BD47AA873069}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeChain.Application.Client", "KeeChain.Application.Client\KeeChain.Application.Client.csproj", "{FAD3F3F6-D99B-4FB3-9557-10217E6ABB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{F23A25C5-B3A3-45E8-848A-BD47AA873069}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F23A25C5-B3A3-45E8-848A-BD47AA873069}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F23A25C5-B3A3-45E8-848A-BD47AA873069}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FAD3F3F6-D99B-4FB3-9557-10217E6ABB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FAD3F3F6-D99B-4FB3-9557-10217E6ABB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FAD3F3F6-D99B-4FB3-9557-10217E6ABB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FAD3F3F6-D99B-4FB3-9557-10217E6ABB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
