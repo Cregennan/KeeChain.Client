@@ -1,0 +1,13 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" Width="450" Height="250"
+        x:Class="KeeChain.Application.Client.AddToken" Title="Добавление токена">
+    <Canvas>
+        <TextBlock Canvas.Top="30" Canvas.Left="40" FontSize="20" FontWeight="Medium">Добавление токена</TextBlock>
+        <TextBox Canvas.Top="80" Canvas.Left="40" Width="300" Watermark="Введите название"/>
+        <TextBox Canvas.Top="130" Canvas.Left="40" Width="300" Watermark="Введите секретный ключ"/>
+        <Button Canvas.Top="180" Canvas.Left="40">Добавить</Button>
+    </Canvas>
+</Window>

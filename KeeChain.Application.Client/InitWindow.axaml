@@ -2,10 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        mc:Ignorable="d" Width="800" Height="450"
         x:Class="KeeChain.Application.Client.InitWindow"
         Title="KeeChain.Application.Client">
     <Canvas>
-        <TextBlock Canvas.Top="100" Canvas.Left="60">Клиент KeeChain</TextBlock>
+        <TextBlock FontSize="30" FontWeight="Bold" Canvas.Top="100" Canvas.Left="60">Клиент KeeChain</TextBlock>
+        <TextBlock Foreground="Green" FontWeight="Bold" FontSize="17" Canvas.Top="170" Canvas.Left="60">Устройство найдено</TextBlock>
+        <TextBox Width="200" Canvas.Top="250" Canvas.Left="60" Watermark="Введите пароль"></TextBox>
+        <Button Canvas.Top="251" Canvas.Left="270">Войти</Button>
+        <Image Canvas.Left="450" Canvas.Top="70" Width="300" Height="300" Source="/Assets/secure.png"></Image>
+        <TextBlock Canvas.Top="300" Canvas.Left="60" Foreground="Red" FontSize="15" FontWeight="Bold">Неверный пароль</TextBlock>
     </Canvas>
 </Window>
