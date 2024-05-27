@@ -1,16 +1,15 @@
-﻿namespace KeeChain.Warlin.Responses;
-
-using System.Collections.ObjectModel;
-using Interfaces;
-
-public class ServiceResponse : IWarlinResponse<ServiceResponse>
+﻿namespace KeeChain.Warlin.Responses
 {
-    public string IdentifyingToken => "SERVICE";
-    public int RequiredPartsCount => 0;
-    public void FromTokens(IEnumerable<string> tokens)
+    using Interfaces;
+
+    public class ServiceResponse : IWarlinResponse<ServiceResponse>
     {
-        Tokens = new ReadOnlyCollection<string>(tokens.ToList());
+        public string IdentifyingToken => "SERVICE";
+        
+        public int RequiredPartsCount => 0;
+
+        public string[] Messages { get; internal set; } = [];
+        
+        public void FromTokens(IEnumerable<string>? tokens) => Messages = tokens?.ToArray() ?? [];
     }
-    
-    public IReadOnlyCollection<string> Tokens { get; private set; }
 }

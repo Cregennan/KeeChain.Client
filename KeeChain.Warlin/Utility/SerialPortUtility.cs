@@ -23,7 +23,7 @@
                 try
                 {
                     var discover = new DiscoverRequest().IdentifyingToken;
-                    var discoverResult = new ACKResponse().IdentifyingToken;
+                    var discoverResult = new AckResponse().IdentifyingToken;
                     connection.Begin(portName, baudRate);
                     connection.WriteLine($"{Definitions.WarlinMagicHeader}{Definitions.WarlinDefaultDivider}{discover}");
                     try

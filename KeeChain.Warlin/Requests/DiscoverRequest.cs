@@ -1,11 +1,15 @@
-﻿namespace KeeChain.Warlin.Requests;
-
-using Interfaces;
-using Responses;
-
-public class DiscoverRequest : IWarlinRequestable<DiscoverRequest, ACKResponse>
+﻿namespace KeeChain.Warlin.Requests
 {
-    IEnumerable<string> IWarlinRequest<DiscoverRequest>.ToTokens() => Enumerable.Empty<string>();
+    using Interfaces;
+    using Responses;
 
-    public string IdentifyingToken => "DISCOVER";
+    public class DiscoverRequest : IWarlinRequestable<DiscoverRequest, AckResponse>
+    {
+        public IEnumerable<string>? ToTokens()
+        {
+            yield break;
+        }
+
+        public string IdentifyingToken => "DISCOVER";
+    }
 }

@@ -13,15 +13,14 @@ if (!connectResult)
     return;
 }
 
-var discover = await warlin.SendRequestAsync<DiscoverRequest, ACKResponse>(new());
+var discover = await warlin.SendRequestAsync<DiscoverRequest, AckResponse>(new());
 if (!discover.IsError)
 {
     Console.WriteLine($"{discover.Response.IdentifyingToken} получен");
 }
 
-var syncr = await warlin.SendRequestAsync<SyncRequest, SyncResponse>(new());
-if ()
-Console.WriteLine($"{syncr.IdentifyingToken} получен");
-
-var response = await warlin.SendRequestAsync<EEPROMHeaderRequest, ServiceResponse>(new());
-Console.WriteLine($"{response.IdentifyingToken} получен");
+var otpResponse = await warlin.SendRequestAsync<TestExplicitCodeRequest, OtpResponse>(new("JBSWY3DPEHPK3PXP"));
+if (!otpResponse.IsError)
+{
+    Console.WriteLine($"Сгенерированный код: {otpResponse.Response.Code}");
+}

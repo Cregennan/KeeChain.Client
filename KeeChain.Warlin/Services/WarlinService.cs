@@ -70,12 +70,7 @@
             }
             
             //Отправляем на устройство
-            var writeTask = _connection.WriteLineAsync(sb);
-            var timeoutTask = Task.Delay(DefaultTimeout);
-            if (timeoutTask == await Task.WhenAny(writeTask, timeoutTask))
-            {
-                throw new TimeoutException("Устройство не отвечает");
-            }
+            await  _connection.WriteLineAsync(sb).WaitAsync(TimeSpan.FromMilliseconds(DefaultTimeout));
             
             sb.Clear();
         }
