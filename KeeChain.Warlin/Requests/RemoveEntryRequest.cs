@@ -1,5 +1,6 @@
 ﻿namespace KeeChain.Warlin.Requests
 {
+    using FluentValidation;
     using Interfaces;
     using Responses;
 
@@ -14,5 +15,13 @@
         public IEnumerable<string>? ToTokens() => [Index.ToString()];
 
         public string IdentifyingToken => "REMOVE_ENTRY";
+    }
+
+    internal class RemoveEntryRequestValidator : AbstractValidator<RemoveEntryRequest>
+    {
+        public RemoveEntryRequestValidator()
+        {
+            RuleFor(x => x.Index).GreaterThanOrEqualTo(0).WithMessage("Номер секрета не должен быть меньше нуля");
+        }
     }
 }

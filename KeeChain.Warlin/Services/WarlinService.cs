@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.Text;
     using Exceptions;
+    using FluentValidation;
     using KeeChain.Warlin.Interfaces;
     using KeeChain.Warlin.Utility;
 
@@ -39,6 +40,16 @@
             where TRequest : IWarlinRequestable<TRequest, TResponse>
             where TResponse : IWarlinResponse<TResponse>, new()
         {
+            var validator = ValidationUtilities.FindValidatorForType(typeof(TRequest));
+            if (validator is not null)
+            {
+                var result = await validator.ValidateAsync(new ValidationContext<TRequest>(request));
+                if (!result.IsValid)
+                {
+                    throw new WarlinValidationException(result.Errors.First().ErrorMessage);
+                }
+            }
+            
             await SendToDeviceAsync(request).ConfigureAwait(false);
 
             return await GetFromDeviceAsync<TResponse>().ConfigureAwait(false);

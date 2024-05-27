@@ -2,6 +2,7 @@
 using KeeChain.Warlin.Responses;
 using KeeChain.Warlin.Serials;
 using KeeChain.Warlin.Services;
+using KeeChain.Warlin.Utility;
 
 var warlin = new WarlinService(new DefaultSerialPort());
 
