@@ -1,0 +1,1 @@
+﻿global using static KeeChain.Application.Client.Utils.GlobalContext;

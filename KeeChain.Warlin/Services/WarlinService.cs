@@ -15,9 +15,12 @@
         
         private readonly ISerialPort _connection;
 
-        public WarlinService(ISerialPort connection)
+        private readonly Action<string> _logger;
+
+        public WarlinService(ISerialPort connection, Action<string> logger)
         {
             _connection = connection;
+            _logger = logger;
         }
 
         public bool TryConnectToBoard()
@@ -107,7 +110,7 @@
                 {
                     if (parts[0].StartsWith(Definitions.WarlinDeviceDebugHeader))
                     {
-                        Console.WriteLine(string.Join(" ", parts));
+                        _logger(string.Join(" ", parts));
                     }
                     if (parts[0].StartsWith(Definitions.WarlinErrorHeader))
                     {

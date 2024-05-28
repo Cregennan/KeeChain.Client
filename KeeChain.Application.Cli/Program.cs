@@ -1,27 +1,25 @@
-﻿using KeeChain.Warlin.Requests;
-using KeeChain.Warlin.Responses;
-using KeeChain.Warlin.Serials;
-using KeeChain.Warlin.Services;
-using KeeChain.Warlin.Utility;
+﻿using KeeChain.Application.Cli;
+using KeeChain.Salavat;
+using KeeChain.Warlin.Exceptions;
+using Spectre.Console;
 
-var warlin = new WarlinService(new DefaultSerialPort());
+var salavat = new Salavat();
 
-var connectResult = warlin.TryConnectToBoard();
-
-if (!connectResult)
+try
 {
-    Console.WriteLine("Не удалось найти плату");
+    await salavat.Initialize();
+    AnsiConsole.MarkupLine("[b][green]Подключение установлено![/][/]");
+
+    await salavat.CliProcessUnlock();
+    AnsiConsole.MarkupLine("[b][green]Устройство разблокировано![/][/]");
+
+    while (true)
+    {
+           
+    }
+}
+catch (WarlinException e)
+{
+    AnsiConsole.MarkupLine($"[b][red]{e.Message}[/][/]");
     return;
-}
-
-var discover = await warlin.SendRequestAsync<DiscoverRequest, AckResponse>(new());
-if (!discover.IsError)
-{
-    Console.WriteLine($"{discover.Response.IdentifyingToken} получен");
-}
-
-var otpResponse = await warlin.SendRequestAsync<TestExplicitCodeRequest, OtpResponse>(new("JBSWY3DPEHPK3PXP"));
-if (!otpResponse.IsError)
-{
-    Console.WriteLine($"Сгенерированный код: {otpResponse.Response.Code}");
 }

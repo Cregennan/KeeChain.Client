@@ -8,6 +8,9 @@ using Interfaces;
 /// <typeparam name="TResponse">Тип результата запроса Warlin</typeparam>
 public sealed class WarlinResponseWrapper<TResponse> where TResponse: IWarlinResponse<TResponse>, new()
 {
+    private string? _error;
+    
+    
     /// <summary>
     /// Результат запроса
     /// </summary>
@@ -16,7 +19,11 @@ public sealed class WarlinResponseWrapper<TResponse> where TResponse: IWarlinRes
     /// <summary>
     /// Код ошибки
     /// </summary>
-    public string? Error { get; set; }
+    public string Error
+    {
+        get => _error ?? "Неизветная оишбка";
+        private init => _error = value;
+    }
 
     /// <summary>
     /// Наличие ошибки в результате выполнения запроса

@@ -1,5 +1,6 @@
 ﻿namespace KeeChain.Warlin.Requests
 {
+    using FluentValidation;
     using Interfaces;
     using Responses;
 
@@ -12,5 +13,15 @@
         public UnlockRequest(string masterPassword) => MasterPassword = masterPassword;
 
         public IEnumerable<string>? ToTokens() => [MasterPassword];
+    }
+
+    internal class UnlockRequestValidator : AbstractValidator<UnlockRequest>
+    {
+        public UnlockRequestValidator()
+        {
+            RuleFor(x => x.MasterPassword)
+                .NotEmpty()
+                .WithMessage("Пароль не должен быть пустым");
+        }
     }
 }
