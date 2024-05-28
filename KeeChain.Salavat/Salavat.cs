@@ -1,7 +1,6 @@
 ﻿namespace KeeChain.Salavat
 {
     using Exceptions;
-    using Warlin.Exceptions;
     using Warlin.Requests;
     using Warlin.Responses;
     using Warlin.Serials;
@@ -39,10 +38,7 @@
             }
 
             var syncr = await _warlin.SendRequestAsync<SyncRequest, SyncrResponse>(new());
-            if (syncr.IsError)
-            {
-                throw new SalavatException(syncr.Error ?? "Неизвестная ошибка");
-            }
+            syncr.ThrowIfError();
 
             EntriesCount = syncr.Response?.VaultEntriesCount ?? 0;
             _initialized = true;
@@ -56,10 +52,7 @@
             }
             
             var result = await _warlin.SendRequestAsync<UnlockRequest, AckResponse>(new(masterPassword));
-            if (result.IsError)
-            {
-                throw new SalavatException(result.Error);
-            }
+            result.ThrowIfError();
 
             _unlocked = true;
         }
@@ -86,6 +79,12 @@
         {
             var ackResponse = await _warlin.SendRequestAsync<StoreEntryRequest, AckResponse>(new(name, secret));
             ackResponse.ThrowIfError();
+        }
+
+        public async Task RemoveEntry(int index)
+        {
+            var removeResponse = await _warlin.SendRequestAsync<RemoveEntryRequest, AckResponse>(new(index));
+            removeResponse.ThrowIfError();
         }
         
     }

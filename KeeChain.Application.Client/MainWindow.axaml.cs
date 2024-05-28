@@ -59,6 +59,18 @@ public partial class MainWindow : Window
                 Redraw();
             }
         };
+        
+        RemoveBtn.Click += async (_, _) =>
+        {
+            var window = new RemoveTokenWindow(_codes.Select(x => x.Name).ToArray());
+            var result = false;
+            window.OnDeleteSuccess += (_, _) => result = true;
+            await window.ShowDialog(this);
+            if (result)
+            {
+                Redraw();
+            }
+        };
 
     }
 
