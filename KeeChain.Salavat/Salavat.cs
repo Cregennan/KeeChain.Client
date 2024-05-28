@@ -81,6 +81,12 @@
 
             return descriptions.ToArray();
         }
+
+        public async Task AddEntry(string name, string secret)
+        {
+            var ackResponse = await _warlin.SendRequestAsync<StoreEntryRequest, AckResponse>(new(name, secret));
+            ackResponse.ThrowIfError();
+        }
         
     }
 }

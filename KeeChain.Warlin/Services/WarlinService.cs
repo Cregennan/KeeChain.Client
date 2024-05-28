@@ -132,7 +132,7 @@
                     throw new InvalidRequestResponseTypeReturnedException();
                 }
             
-                if (parts.Length != response.RequiredPartsCount + 2)
+                if (parts.Length < response.RequiredPartsCount + 2)
                 {
                     throw new NotEnoughTokensInResponseException();
                 }

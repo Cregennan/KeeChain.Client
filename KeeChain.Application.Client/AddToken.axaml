@@ -6,8 +6,8 @@
         x:Class="KeeChain.Application.Client.AddToken" Title="Добавление токена">
     <Canvas>
         <TextBlock Canvas.Top="30" Canvas.Left="40" FontSize="20" FontWeight="Medium">Добавление токена</TextBlock>
-        <TextBox Canvas.Top="80" Canvas.Left="40" Width="300" Watermark="Введите название"/>
-        <TextBox Canvas.Top="130" Canvas.Left="40" Width="300" Watermark="Введите секретный ключ"/>
-        <Button Canvas.Top="180" Canvas.Left="40">Добавить</Button>
+        <TextBox Name="Name" Canvas.Top="80" Canvas.Left="40" Width="300" Watermark="Введите название"/>
+        <TextBox Name="Secret" Canvas.Top="130" Canvas.Left="40" Width="300" Watermark="Введите секретный ключ"/>
+        <Button Name="Submit" Click="OnSubmitClick" Canvas.Top="180" Canvas.Left="40">Добавить</Button>
     </Canvas>
 </Window>

@@ -36,14 +36,30 @@ public partial class MainWindow : Window
     private OTPDescription[] _codes = [];
 
     private RowDescription[] _rows = [];
+
+    private object _lockObject = new();
     
     public MainWindow()
     {
         InitializeComponent();
         if (!Design.IsDesignMode)
         {
+            Listen();
             Redraw();
         }
+
+        AddBtn.Click += async (_, _) =>
+        {
+            var window = new AddToken();
+            var result = false;
+            window.OnSubmitSuccess += (_, _) => result = true;
+            await window.ShowDialog(this);
+            if (result)
+            {
+                Redraw();
+            }
+        };
+
     }
 
     private async Task Redraw()
@@ -61,13 +77,10 @@ public partial class MainWindow : Window
             await box.ShowAsync();
             return;
         }
-        
-        await _source.CancelAsync();
-        _source.Dispose();
-        _source = new();
-        
+
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
+            
             foreach (var row in _rows)
             {
                 MainCanvas.Children.Remove(row.Code);
@@ -75,19 +88,19 @@ public partial class MainWindow : Window
                 MainCanvas.Children.Remove(row.Name);
                 MainCanvas.Children.Remove(row.Rectangle);
             }
-        }, DispatcherPriority.Render, _source.Token);
-
-        _rows = _codes.Select((codeDescr, index) => new RowDescription()
+            
+            lock (_lockObject)
             {
-                Name = GetNameBlock(codeDescr.Name, index),
-                Code = GetCodeBlock(codeDescr.Code, index),
-                Progress = GetProgressBar(index),
-                Rectangle = GetRectangle(index)
-            })
-            .ToArray();
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
+                _rows = _codes.Select((codeDescr, index) => new RowDescription()
+                    {
+                        Name = GetNameBlock(codeDescr.Name, index),
+                        Code = GetCodeBlock(codeDescr.Code, index),
+                        Progress = GetProgressBar(index),
+                        Rectangle = GetRectangle(index)
+                    })
+                    .ToArray();
+            }
+        
             foreach (var row in _rows)
             {
                 MainCanvas.Children.Add(row.Code);
@@ -95,17 +108,12 @@ public partial class MainWindow : Window
                 MainCanvas.Children.Add(row.Name);
                 MainCanvas.Children.Add(row.Rectangle);
             }
-            
+                
             AddBtn.IsVisible = _rows.Length < 6;
             RemoveBtn.IsVisible = _rows.Length > 0;
             KeysLabel.Content = _rows.Length > 0 ? "Сохраненные ключи" : "Нет сохраненных ключей";
 
         }, DispatcherPriority.Render, _source.Token);
-        
-        if (!Design.IsDesignMode)
-        {
-            Listen();
-        }
     }
     
 #region BlockGen
@@ -171,13 +179,21 @@ private static ProgressBar GetProgressBar(int index)
         {
             while (!_source.Token.IsCancellationRequested)
             {
-                var time = 30 - DateTimeOffset.UtcNow.ToUnixTimeSeconds() % 30;
+                var time = DateTimeOffset.UtcNow.ToUnixTimeSeconds() % 30;
 
+                if (time == 0)
+                {
+                    Redraw();
+                }
+                
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    foreach (var row in _rows)
+                    lock (_lockObject)
                     {
-                        row.Progress.Value = time;
+                        foreach (var row in _rows)
+                        {
+                            row.Progress.Value = 30 - time;
+                        }
                     }
                 }, DispatcherPriority.Render, _source.Token);
                 
