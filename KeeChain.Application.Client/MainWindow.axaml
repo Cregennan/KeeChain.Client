@@ -2,34 +2,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" Width="800" Height="600"
+        mc:Ignorable="d" Width="800" Height="670"
         x:Class="KeeChain.Application.Client.MainWindow"
         Title="MainWindow">
-    <Canvas>
+    <Canvas Name="MainCanvas">
         <TextBlock FontSize="30" FontWeight="Bold" Canvas.Top="70" Canvas.Left="60">Клиент KeeChain</TextBlock>
         <Image Canvas.Left="495" Canvas.Top="100" Width="250" Height="250" Source="/Assets/secure.png"></Image>
-        <Label Canvas.Top="120" Canvas.Left="60">Сохраненные ключи</Label>
+        <Label Name="KeysLabel" Canvas.Top="120" Canvas.Left="60">Сохраненные ключи</Label>
         
-        <Rectangle Canvas.Top="160" Canvas.Left="60" Fill="Transparent" Stroke="Gray" RadiusX="4" RadiusY="4" Width="340" Height="60" StrokeThickness="1"/>
-        <TextBlock Canvas.Top="178" Canvas.Left="75" FontSize="20">Google</TextBlock>
-        <TextBlock Name="Random1" Canvas.Top="175" Canvas.Left="295" FontWeight="Bold" FontSize="25">126632</TextBlock>
-        <ProgressBar Name="Bar1" Minimum="0" Maximum="100" Value="60" Width="340" Height="2" Canvas.Top="214" Canvas.Left="60"></ProgressBar>
-        
-        <Rectangle Canvas.Top="240" Canvas.Left="60" Fill="Transparent" Stroke="Gray" RadiusX="4" RadiusY="4" Width="340" Height="60" StrokeThickness="1"/>
-        <TextBlock Canvas.Top="258" Canvas.Left="75" FontSize="20">Microsoft</TextBlock>
-        <TextBlock Name="Random2" Canvas.Top="255" Canvas.Left="295" FontWeight="Bold" FontSize="25">126632</TextBlock>
-        <ProgressBar Name="Bar2" Minimum="0" Maximum="100" Value="60" Width="340" Height="2" Canvas.Top="294" Canvas.Left="60"></ProgressBar>
-        
-        <Rectangle Canvas.Top="320" Canvas.Left="60" Fill="Transparent" Stroke="Gray" RadiusX="4" RadiusY="4" Width="340" Height="60" StrokeThickness="1"/>
-        <TextBlock Canvas.Top="338" Canvas.Left="75" FontSize="20">Steam</TextBlock>
-        <TextBlock Name="Random3" Canvas.Top="335" Canvas.Left="295" FontWeight="Bold" FontSize="25">126632</TextBlock>
-        <ProgressBar Name="Bar3" Minimum="0" Maximum="100" Value="60" Width="340" Height="2" Canvas.Top="374" Canvas.Left="60"></ProgressBar>
-        
-        <Rectangle IsVisible="True" Canvas.Top="400" Canvas.Left="60" Fill="Transparent" Stroke="Gray" RadiusX="4" RadiusY="4" Width="340" Height="60" StrokeThickness="1"/>
-        <TextBlock IsVisible="True" Canvas.Top="418" Canvas.Left="75" FontSize="20">Госуслуги</TextBlock>
-        <TextBlock IsVisible="True" Name="Random4" Canvas.Top="415" Canvas.Left="295" FontWeight="Bold" FontSize="25">126632</TextBlock>
-        <ProgressBar IsVisible="True" Name="Bar4" Minimum="0" Maximum="100" Value="60" Width="340" Height="2" Canvas.Top="454" Canvas.Left="60"></ProgressBar>
-        
-        <Button Name="AddBtn" Canvas.Top="490" Canvas.Left="60">Добавить</Button>
+        <Button Name="AddBtn" Canvas.Top="590" Canvas.Left="60">Добавить</Button>
+        <Button Name="RemoveBtn" Canvas.Top="590" Canvas.Left="170">Удалить</Button>
     </Canvas>
 </Window>

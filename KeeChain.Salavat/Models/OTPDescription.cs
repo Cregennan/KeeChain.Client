@@ -1,4 +1,4 @@
 ﻿namespace KeeChain.Salavat
 {
-    public record OTPDescription(string Index, string Code);
+    public record OTPDescription(string Name, string Code);
 }

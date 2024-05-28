@@ -1,5 +1,6 @@
 ﻿namespace KeeChain.Warlin;
 
+using Exceptions;
 using Interfaces;
 
 /// <summary>
@@ -39,5 +40,13 @@ public sealed class WarlinResponseWrapper<TResponse> where TResponse: IWarlinRes
     {
         IsError = true;
         Error = errorMessage;
+    }
+
+    public void ThrowIfError()
+    {
+        if (this.IsError)
+        {
+            throw new WarlinException(this.Error);
+        }
     }
 }

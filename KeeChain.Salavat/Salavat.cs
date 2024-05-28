@@ -1,6 +1,7 @@
 ﻿namespace KeeChain.Salavat
 {
     using Exceptions;
+    using Warlin.Exceptions;
     using Warlin.Requests;
     using Warlin.Responses;
     using Warlin.Serials;
@@ -62,7 +63,24 @@
 
             _unlocked = true;
         }
-        
+
+        public async Task<OTPDescription[]> GetCodes()
+        {
+            var entriesResponse = await _warlin.SendRequestAsync<GetEntriesRequest, EntriesResponse>(new());
+            entriesResponse.ThrowIfError();
+            var entries = entriesResponse.Response?.Entries.ToArray() ?? [];
+            var descriptions = new List<OTPDescription>();
+            
+            for (var index = 0; index < entries.Length; index++)
+            {
+                var code = await _warlin.SendRequestAsync<GenerateRequest, OtpResponse>(new GenerateRequest(index));
+                code.ThrowIfError();
+                
+                descriptions.Add(new OTPDescription(entries[index], code.Response?.Code ?? "Ошибка"));
+            }
+
+            return descriptions.ToArray();
+        }
         
     }
 }
