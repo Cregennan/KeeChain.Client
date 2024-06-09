@@ -44,7 +44,7 @@
 
             RuleFor(x => x.Secret)
                 .MinimumLength(2)
-                .MaximumLength(50)
+                .MaximumLength(200)
                 .WithMessage("Длина секрета должна быть от 2 до 50 символов");
 
             RuleFor(x => x.Secret)
